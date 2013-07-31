@@ -54,10 +54,13 @@ class top_block(gr.top_block):
 
         # socket addresses
         rpc_adr_server = "tcp://localhost:6666"
-        probe_adr = "tcp://localhost:5556"
+        rpc_adr_reply = "tcp://*:6666"
+        probe_adr_gui = "tcp://localhost:5556"
+        probe_adr_fg = "tcp://*:5556"
+        sink_adr = "tcp://*:5555"
 
         # create the main window
-        self.ui = gui.gui("Server",rpc_adr_server,rpc_adr_server,probe_adr)
+        self.ui = gui.gui("Server",rpc_adr_server,rpc_adr_server,probe_adr_gui)
         self.ui.show()
 
         # the strange sampling rate gives a nice movement in the plot :P
@@ -67,10 +70,10 @@ class top_block(gr.top_block):
         self.gr_sig_source = analog.sig_source_f(samp_rate, analog.GR_SIN_WAVE , 1000, 1, 0)
         self.throttle = blocks.throttle(gr.sizeof_float, samp_rate)
         self.mult = blocks.multiply_const_ff(1)
-        #self.zmq_sink = zmqblocks.sink_reqrep_nopoll(gr.sizeof_float, "tcp://*:5555")
-        self.zmq_sink = zmqblocks.sink_reqrep(gr.sizeof_float, "tcp://*:5555")
-        #self.zmq_sink = zmqblocks.sink_pushpull(gr.sizeof_float, "tcp://*:5555")
-        self.zmq_probe = zmqblocks.probe_pushpull(gr.sizeof_float, "tcp://*:5556")
+        #self.zmq_sink = zmqblocks.sink_reqrep_nopoll(gr.sizeof_float, sink_adr)
+        self.zmq_sink = zmqblocks.sink_reqrep(gr.sizeof_float, sink_adr)
+        #self.zmq_sink = zmqblocks.sink_pushpull(gr.sizeof_float, sink_adr)
+        self.zmq_probe = zmqblocks.probe_pushpull(gr.sizeof_float, probe_adr_fg)
         #self.null_sink = blocks.null_sink(gr.sizeof_float)
 
         # connects
@@ -79,7 +82,7 @@ class top_block(gr.top_block):
 
         # ZeroMQ
         self.rpc_manager = zmqblocks.rpc_manager()
-        self.rpc_manager.set_reply_socket("tcp://*:6666")
+        self.rpc_manager.set_reply_socket(rpc_adr_reply)
         self.rpc_manager.add_interface("start_fg",self.start_fg)
         self.rpc_manager.add_interface("stop_fg",self.stop_fg)
         self.rpc_manager.add_interface("set_waveform",self.set_waveform)

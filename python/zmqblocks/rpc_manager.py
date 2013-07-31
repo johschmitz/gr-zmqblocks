@@ -71,7 +71,6 @@ class rpc_manager():
         t.start()
 
     def request(self, id_str, args=None):
-        print args
         socks = dict(self.poller_req_out.poll(10))
         if socks.get(self.req_socket) == zmq.POLLOUT:
             self.req_socket.send(pmt.serialize_str(pmt.to_pmt((id_str,args))))

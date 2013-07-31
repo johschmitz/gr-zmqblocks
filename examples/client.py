@@ -54,26 +54,28 @@ class top_block(gr.top_block):
 
         # socket addresses
         rpc_adr_server = "tcp://"+self.options.servername+":6666"
-        print rpc_adr_server
         rpc_adr_client = "tcp://localhost:6667"
-        probe_adr = "tcp://localhost:5557"
+        rpc_adr_reply = "tcp://*:6667"
+        probe_adr_gui = "tcp://localhost:5557"
+        probe_adr_fg = "tcp://*:5557"
+        source_adr = "tcp://"+self.options.servername+":5555"
 
         # create the main window
-        self.ui = gui.gui("Client",rpc_adr_client,rpc_adr_server,probe_adr)
+        self.ui = gui.gui("Client",rpc_adr_client,rpc_adr_server,probe_adr_gui)
         self.ui.show()
 
         # blocks
-        #self.zmq_source = zmqblocks.source_reqrep_nopoll(gr.sizeof_float,"tcp://localhost:5555")
-        self.zmq_source = zmqblocks.source_reqrep(gr.sizeof_float,"tcp://localhost:5555")
-        #self.zmq_source = zmqblocks.source_pushpull(gr.sizeof_float,"tcp://localhost:5555")
-        self.zmq_probe = zmqblocks.probe_pushpull(gr.sizeof_float,"tcp://*:5557")
+        #self.zmq_source = zmqblocks.source_reqrep_nopoll(gr.sizeof_float,source_adr)
+        self.zmq_source = zmqblocks.source_reqrep(gr.sizeof_float,source_adr)
+        #self.zmq_source = zmqblocks.source_pushpull(gr.sizeof_float,source_adr)
+        self.zmq_probe = zmqblocks.probe_pushpull(gr.sizeof_float,probe_adr_fg)
 
         # connects
         self.connect(self.zmq_source, self.zmq_probe)
 
         # ZeroMQ
         self.rpc_manager = zmqblocks.rpc_manager()
-        self.rpc_manager.set_reply_socket("tcp://*:6667")
+        self.rpc_manager.set_reply_socket(rpc_adr_reply)
         self.rpc_manager.add_interface("start_fg",self.start_fg)
         self.rpc_manager.add_interface("stop_fg",self.stop_fg)
         self.rpc_manager.start_watcher()
