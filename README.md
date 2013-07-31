@@ -42,7 +42,8 @@ and
 
     client.py -s hostname
 
-It is not important if server or client script has been started first.
+in doing so it is not important if server or client script has been started
+first.
 
 Copyright information
 ------------------
