@@ -6,7 +6,7 @@ over a network and to perform remote procedure calls.
 Build requirements
 ------------------
 In order to build the gr-zmqblocks module you will need to install ZeroMQ
-(http://zeromq.org/) including the C++ headers.
+(http://zeromq.org/) including the C++ and Python bindings.
 
 How to build
 ------------
@@ -48,7 +48,7 @@ first.
 Copyright information
 ------------------
 Copyright © 2013 Institute for Theoretical Information Technology,
-                 RWTH Aachen University
+                 RWTH Aachen University  
 Johannes Schmitz <schmitz@ti.rwth-aachen.de>
 
 Unless otherwise stated, all files are distributed under GPL v3 license.
