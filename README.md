@@ -1,5 +1,5 @@
 gr-zmqblocks GNU Radio module
------------------------------
+=============================
 Provides additional blocks and Python classes to connect GNU Radio flowgraphs
 over a network and to perform remote procedure calls.
 
