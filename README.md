@@ -12,11 +12,36 @@ How to build
 ------------
 In the gr-zmqblocks folder do:
 
-mkdir build
-cd build
-cmake ../
-make
-make install
+    mkdir build
+    cd build
+    cmake ../
+    make
+
+optional:
+    make install
+
+How to run example
+------------------
+In the gr-zmqblocks folder do:
+
+If not installed
+
+    cd examples
+    ./run_app.sh server
+
+on another terminal or machine
+
+    ./run_app.sh client -s hostname
+
+If installed just run
+
+    server.py
+
+and
+
+    client.py -s hostname
+
+It is not important if server or client is started first.
 
 Copyright information
 ------------------
