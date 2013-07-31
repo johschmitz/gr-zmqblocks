@@ -5,25 +5,26 @@ over a network and to perform remote procedure calls.
 
 Build requirements
 ------------------
-In order to build the gr-zmqblocks module you will need to install ZeroMQ
-(http://zeromq.org/) including the C++ and Python bindings.
+In order to build the gr-zmqblocks module you will need to install GNU Radio
+(http://gnuradio.org/) and ZeroMQ (http://zeromq.org/) including the C++ and
+Python bindings.
 
 How to build
 ------------
-In the gr-zmqblocks folder do:
+In the gr-zmqblocks folder do
 
     mkdir build
     cd build
     cmake ../
     make
 
-optional:
+optional
 
     make install
 
 How to run example
 ------------------
-In the gr-zmqblocks folder do:
+In the gr-zmqblocks folder do
 
 If not installed
 
