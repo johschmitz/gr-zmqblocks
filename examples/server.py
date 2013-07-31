@@ -52,8 +52,12 @@ class top_block(gr.top_block):
         # give Ctrl+C back to system
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+        # socket addresses
+        rpc_adr_server = "tcp://localhost:6666"
+        probe_adr = "tcp://localhost:5556"
+
         # create the main window
-        self.ui = gui.gui("Server","tcp://localhost:6666","tcp://localhost:6666","tcp://localhost:5556")
+        self.ui = gui.gui("Server",rpc_adr_server,rpc_adr_server,probe_adr)
         self.ui.show()
 
         # the strange sampling rate gives a nice movement in the plot :P

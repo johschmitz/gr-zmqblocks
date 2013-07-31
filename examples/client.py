@@ -52,8 +52,14 @@ class top_block(gr.top_block):
         # give Ctrl+C back to system
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+        # socket addresses
+        rpc_adr_server = "tcp://"+self.options.servername+":6666"
+        print rpc_adr_server
+        rpc_adr_client = "tcp://localhost:6667"
+        probe_adr = "tcp://localhost:5557"
+
         # create the main window
-        self.ui = gui.gui("Client","tcp://localhost:6667","tcp://localhost:6666","tcp://localhost:5557")
+        self.ui = gui.gui("Client",rpc_adr_client,rpc_adr_server,probe_adr)
         self.ui.show()
 
         # blocks
@@ -91,6 +97,8 @@ class top_block(gr.top_block):
 def parse_options():
     """ Options parser. """
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
+    parser.add_option("-s", "--servername", type="string", default="localhost",
+                      help="Server hostname")
     (options, args) = parser.parse_args()
     return options
 
