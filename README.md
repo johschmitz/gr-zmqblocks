@@ -49,7 +49,7 @@ first.
 Copyright information
 ------------------
 Copyright © 2013 Institute for Theoretical Information Technology,
-                 RWTH Aachen University  
-Johannes Schmitz <schmitz@ti.rwth-aachen.de>
+                 RWTH Aachen University <https://www.ti.rwth-aachen.de/>  
+Author: Johannes Schmitz <schmitz@ti.rwth-aachen.de>
 
 Unless otherwise stated, all files are distributed under GPL v3 license.
