@@ -18,6 +18,7 @@ In the gr-zmqblocks folder do:
     make
 
 optional:
+
     make install
 
 How to run example
@@ -41,7 +42,7 @@ and
 
     client.py -s hostname
 
-It is not important if server or client is started first.
+It is not important if server or client script has been started first.
 
 Copyright information
 ------------------
