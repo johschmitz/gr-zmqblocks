@@ -28,20 +28,23 @@ import threading
 class rpc_manager():
     def __init__(self):
         self.zmq_context = zmq.Context()
-        self.poller = zmq.Poller()
+        self.poller_rep = zmq.Poller()
+        self.poller_req_out = zmq.Poller()
+        self.poller_req_in = zmq.Poller()
         self.interfaces = dict()
 
     def set_reply_socket(self, address):
         self.rep_socket = self.zmq_context.socket(zmq.REP)
         self.rep_socket.bind(address)
         print "[RPC] reply socket bound to: ", address
-        self.poller.register(self.rep_socket, zmq.POLLIN)
+        self.poller_rep.register(self.rep_socket, zmq.POLLIN)
 
     def set_request_socket(self, address):
         self.req_socket = self.zmq_context.socket(zmq.REQ)
         self.req_socket.connect(address)
         print "[RPC] request socket connected to: ", address
-        #self.poller.register(self.req_socket, zmq.POLLOUT)
+        self.poller_req_out.register(self.req_socket, zmq.POLLOUT)
+        self.poller_req_in.register(self.req_socket, zmq.POLLIN)
 
     def add_interface(self, id_str, callback_func):
         if not self.interfaces.has_key(id_str):
@@ -53,7 +56,7 @@ class rpc_manager():
     def watcher(self):
         while True:
             # poll for calls
-            socks = dict(self.poller.poll())
+            socks = dict(self.poller_rep.poll(10))
             if socks.get(self.rep_socket) == zmq.POLLIN:
                 # receive call
                 msg = self.rep_socket.recv()
@@ -68,11 +71,14 @@ class rpc_manager():
         t.start()
 
     def request(self, id_str, args=None):
-        # FIXME: need to poll?
-        self.req_socket.send(pmt.serialize_str(pmt.to_pmt((id_str,args))))
-        reply = pmt.to_python(pmt.deserialize_str(self.req_socket.recv()))
-        print "[RPC] reply:", reply
-        return reply
+        socks = dict(self.poller_req_out.poll(10))
+        if socks.get(self.req_socket) == zmq.POLLOUT:
+            self.req_socket.send(pmt.serialize_str(pmt.to_pmt((id_str,args))))
+        socks = dict(self.poller_req_in.poll(10))
+        if socks.get(self.req_socket) == zmq.POLLIN:
+            reply = pmt.to_python(pmt.deserialize_str(self.req_socket.recv()))
+            print "[RPC] reply:", reply
+            return reply
 
     def callback(self, id_str, args):
         if self.interfaces.has_key(id_str):
