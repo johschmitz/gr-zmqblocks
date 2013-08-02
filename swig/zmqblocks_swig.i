@@ -15,6 +15,7 @@
 #include "zmqblocks/sink_pushpull.h"
 #include "zmqblocks/source_pushpull.h"
 #include "zmqblocks/probe_pushpull.h"
+#include "zmqblocks/source_pushpull_feedback.h"
 %}
 
 %include "zmqblocks/sink_reqrep.h"
@@ -31,3 +32,5 @@ GR_SWIG_BLOCK_MAGIC2(zmqblocks, sink_pushpull);
 GR_SWIG_BLOCK_MAGIC2(zmqblocks, source_pushpull);
 %include "zmqblocks/probe_pushpull.h"
 GR_SWIG_BLOCK_MAGIC2(zmqblocks, probe_pushpull);
+%include "zmqblocks/source_pushpull_feedback.h"
+GR_SWIG_BLOCK_MAGIC2(zmqblocks, source_pushpull_feedback);

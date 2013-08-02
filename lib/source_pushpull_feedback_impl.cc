@@ -1,9 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2013 Institute for Theoretical Information Technology,
- *                RWTH Aachen University
- * 
- * Authors: Johannes Schmitz <schmitz@ti.rwth-aachen.de>
+ * Copyright 2013 <+YOU OR YOUR COMPANY+>.
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,26 +23,26 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "source_pushpull_impl.h"
+#include "source_pushpull_feedback_impl.h"
 
 namespace gr {
   namespace zmqblocks {
 
-    source_pushpull::sptr
-    source_pushpull::make(size_t itemsize, char *address)
+    source_pushpull_feedback::sptr
+    source_pushpull_feedback::make(size_t itemsize, char *address)
     {
       return gnuradio::get_initial_sptr
-        (new source_pushpull_impl(itemsize, address));
+        (new source_pushpull_feedback_impl(itemsize, address));
     }
 
     /*
      * The private constructor
      */
-    source_pushpull_impl::source_pushpull_impl(size_t itemsize, char *address)
-      : gr::sync_block("source_pushpull",
+    source_pushpull_feedback_impl::source_pushpull_feedback_impl(size_t itemsize, char *address)
+      : gr::sync_block("source_pushpull_feedback",
                        gr::io_signature::make(0, 0, 0),
                        gr::io_signature::make(1, 1, itemsize)),
-        d_itemsize(itemsize)
+        d_itemsize(itemsize), d_first_work(true)
     {
         d_context = new zmq::context_t(1);
         d_socket = new zmq::socket_t(*d_context, ZMQ_PULL);
@@ -56,16 +53,16 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    source_pushpull_impl::~source_pushpull_impl()
+    source_pushpull_feedback_impl::~source_pushpull_feedback_impl()
     {
         delete(d_socket);
         delete(d_context);
     }
 
     int
-    source_pushpull_impl::work(int noutput_items,
-                               gr_vector_const_void_star &input_items,
-                               gr_vector_void_star &output_items)
+    source_pushpull_feedback_impl::work(int noutput_items,
+                                        gr_vector_const_void_star &input_items,
+                                        gr_vector_void_star &output_items)
     {
         char *out = (char*)output_items[0];
 
@@ -87,7 +84,8 @@ namespace gr {
                 return msg.size()/d_itemsize;
             }
         } else {
-            return 0;
+                memset(out, 0, noutput_items);
+                return noutput_items;
         }
     }
 

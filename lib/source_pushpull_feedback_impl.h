@@ -1,9 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2013 Institute for Theoretical Information Technology,
- *                RWTH Aachen University
- * 
- * Authors: Johannes Schmitz <schmitz@ti.rwth-aachen.de>
+ * Copyright 2013 <+YOU OR YOUR COMPANY+>.
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,25 +18,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_IMPL_H
-#define INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_IMPL_H
+#ifndef INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_FEEDBACK_IMPL_H
+#define INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_FEEDBACK_IMPL_H
 
-#include <zmqblocks/source_pushpull.h>
+#include <zmqblocks/source_pushpull_feedback.h>
 #include <zmq.hpp>
 
 namespace gr {
   namespace zmqblocks {
 
-    class source_pushpull_impl : public source_pushpull
+    class source_pushpull_feedback_impl : public source_pushpull_feedback
     {
     private:
         size_t          d_itemsize;
         zmq::context_t  *d_context;
         zmq::socket_t   *d_socket;
+        bool            d_first_work;
 
      public:
-        source_pushpull_impl(size_t itemsize, char *address);
-        ~source_pushpull_impl();
+        source_pushpull_feedback_impl(size_t itemsize, char *address);
+        ~source_pushpull_feedback_impl();
 
       int work(int noutput_items,
                gr_vector_const_void_star &input_items,
@@ -49,5 +47,5 @@ namespace gr {
   } // namespace zmqblocks
 } // namespace gr
 
-#endif /* INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_IMPL_H */
+#endif /* INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_FEEDBACK_IMPL_H */
 

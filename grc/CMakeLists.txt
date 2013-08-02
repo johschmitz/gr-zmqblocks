@@ -23,5 +23,6 @@ install(FILES
     zmqblocks_source_reqrep_nopoll.xml
     zmqblocks_sink_pushpull.xml
     zmqblocks_source_pushpull.xml
-    zmqblocks_probe_pushpull.xml DESTINATION share/gnuradio/grc/blocks
+    zmqblocks_probe_pushpull.xml
+    zmqblocks_source_pushpull_feedback.xml DESTINATION share/gnuradio/grc/blocks
 )

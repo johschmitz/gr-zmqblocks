@@ -32,6 +32,7 @@ list(APPEND zmqblocks_sources
     sink_pushpull_impl.cc
     source_pushpull_impl.cc
     probe_pushpull_impl.cc
+    source_pushpull_feedback_impl.cc
 )
 
 add_library(gnuradio-zmqblocks SHARED ${zmqblocks_sources})
