@@ -28,6 +28,7 @@ install(FILES
     source_reqrep_nopoll.h
     sink_pushpull.h
     source_pushpull.h
-    probe_pushpull.h
-    source_pushpull_feedback.h DESTINATION include/zmqblocks
+    source_pushpull_feedback.h
+    sink_pubsub.h
+    DESTINATION include/zmqblocks
 )

@@ -38,12 +38,12 @@ namespace gr {
         zmq::socket_t   *d_socket;
 
      public:
-      sink_pushpull_impl(size_t itemsize, char *address);
-      ~sink_pushpull_impl();
+        sink_pushpull_impl(size_t itemsize, char *address);
+        ~sink_pushpull_impl();
 
-      int work(int noutput_items,
-               gr_vector_const_void_star &input_items,
-               gr_vector_void_star &output_items);
+        int work(int noutput_items,
+                 gr_vector_const_void_star &input_items,
+                 gr_vector_void_star &output_items);
     };
 
   } // namespace zmqblocks

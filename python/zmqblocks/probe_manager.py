@@ -31,7 +31,8 @@ class probe_manager():
         self.interfaces = []
 
     def add_pull_socket(self, address, data_type, callback_func):
-        socket = self.zmq_context.socket(zmq.PULL)
+        socket = self.zmq_context.socket(zmq.SUB)
+        socket.setsockopt(zmq.SUBSCRIBE, "")
         socket.connect(address)
         # use a tuple to store interface elements
         self.interfaces.append((socket, data_type, callback_func))

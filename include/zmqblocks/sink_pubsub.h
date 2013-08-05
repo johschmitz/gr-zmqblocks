@@ -1,9 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2013 Institute for Theoretical Information Technology,
- *                RWTH Aachen University
- * 
- * Authors: Johannes Schmitz <schmitz@ti.rwth-aachen.de>
+ * Copyright 2013 <+YOU OR YOUR COMPANY+>.
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +19,8 @@
  */
 
 
-#ifndef INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_H
-#define INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_H
+#ifndef INCLUDED_ZMQBLOCKS_SINK_PUBSUB_H
+#define INCLUDED_ZMQBLOCKS_SINK_PUBSUB_H
 
 #include <zmqblocks/api.h>
 #include <gnuradio/sync_block.h>
@@ -36,17 +33,17 @@ namespace gr {
      * \ingroup zmqblocks
      *
      */
-    class ZMQBLOCKS_API probe_pushpull : virtual public gr::sync_block
+    class ZMQBLOCKS_API sink_pubsub : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<probe_pushpull> sptr;
+      typedef boost::shared_ptr<sink_pubsub> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of zmqblocks::probe_pushpull.
+       * \brief Return a shared_ptr to a new instance of zmqblocks::sink_pubsub.
        *
-       * To avoid accidental use of raw pointers, zmqblocks::probe_pushpull's
+       * To avoid accidental use of raw pointers, zmqblocks::sink_pubsub's
        * constructor is in a private implementation
-       * class. zmqblocks::probe_pushpull::make is the public interface for
+       * class. zmqblocks::sink_pubsub::make is the public interface for
        * creating new instances.
        */
       static sptr make(size_t itemsize, char *address);
@@ -55,5 +52,5 @@ namespace gr {
   } // namespace zmqblocks
 } // namespace gr
 
-#endif /* INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_H */
+#endif /* INCLUDED_ZMQBLOCKS_SINK_PUBSUB_H */
 

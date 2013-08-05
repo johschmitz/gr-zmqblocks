@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-  <name>probe_pushpull</name>
-  <key>zmqblocks_probe_pushpull</key>
+  <name>sink_pubsub</name>
+  <key>zmqblocks_sink_pubsub</key>
   <category>zmqblocks</category>
   <import>import zmqblocks</import>
-  <make>zmqblocks.probe_pushpull($itemsize, $*address)</make>
+  <make>zmqblocks.sink_pubsub($itemsize, $*address)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name

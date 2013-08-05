@@ -4,7 +4,7 @@
  *                RWTH Aachen University
  * 
  * Authors: Johannes Schmitz <schmitz@ti.rwth-aachen.de>
- *
+ * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
@@ -26,56 +26,55 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "probe_pushpull_impl.h"
-#include <cstring>
+#include "sink_pubsub_impl.h"
 
 namespace gr {
   namespace zmqblocks {
 
-    probe_pushpull::sptr
-    probe_pushpull::make(size_t itemsize, char *address)
+    sink_pubsub::sptr
+    sink_pubsub::make(size_t itemsize, char *address)
     {
-      return gnuradio::get_initial_sptr
-        (new probe_pushpull_impl(itemsize, address));
+        return gnuradio::get_initial_sptr
+            (new sink_pubsub_impl(itemsize, address));
     }
 
     /*
      * The private constructor
      */
-    probe_pushpull_impl::probe_pushpull_impl(size_t itemsize, char *address)
-      : gr::sync_block("probe_pushpull",
+    sink_pubsub_impl::sink_pubsub_impl(size_t itemsize, char *address)
+      : gr::sync_block("sink_pubsub",
                        gr::io_signature::make(1, 1, itemsize),
                        gr::io_signature::make(0, 0, 0)),
         d_itemsize(itemsize)
     {
         d_context = new zmq::context_t(1);
-        d_socket = new zmq::socket_t(*d_context, ZMQ_PUSH);
-        d_socket->bind (address);
-        std::cout << "probe_pushpull on " << address << std::endl;
+        d_socket = new zmq::socket_t(*d_context, ZMQ_PUB);
+        d_socket->bind(address);
+        std::cout << "sink_pubsub on " << address << std::endl;
     }
 
     /*
      * Our virtual destructor.
      */
-    probe_pushpull_impl::~probe_pushpull_impl()
+    sink_pubsub_impl::~sink_pubsub_impl()
     {
         delete(d_socket);
         delete(d_context);
     }
 
     int
-    probe_pushpull_impl::work(int noutput_items,
-                         gr_vector_const_void_star &input_items,
-                         gr_vector_void_star &output_items)
+    sink_pubsub_impl::work(int noutput_items,
+                           gr_vector_const_void_star &input_items,
+                           gr_vector_void_star &output_items)
     {
         const char *in = (const char *) input_items[0];
-
         // create message copy and send
         zmq::message_t msg(d_itemsize*noutput_items);
         memcpy((void *)msg.data(), in, d_itemsize*noutput_items);
         d_socket->send(msg);
 
         return noutput_items;
+
     }
 
   } /* namespace zmqblocks */

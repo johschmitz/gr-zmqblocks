@@ -21,33 +21,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_IMPL_H
-#define INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_IMPL_H
+#ifndef INCLUDED_ZMQBLOCKS_SINK_PUBSUB_IMPL_H
+#define INCLUDED_ZMQBLOCKS_SINK_PUBSUB_IMPL_H
 
-#include <zmqblocks/probe_pushpull.h>
+#include <zmqblocks/sink_pubsub.h>
 #include <zmq.hpp>
 
 namespace gr {
-    namespace zmqblocks {
+  namespace zmqblocks {
 
-        class probe_pushpull_impl : public probe_pushpull
-        {
-        private:
-            size_t          d_itemsize;
-            zmq::context_t  *d_context;
-            zmq::socket_t   *d_socket;
+    class sink_pubsub_impl : public sink_pubsub
+    {
+    private:
+        size_t          d_itemsize;
+        zmq::context_t  *d_context;
+        zmq::socket_t   *d_socket;
 
-        public:
-            probe_pushpull_impl(size_t itemsize, char *address);
-            ~probe_pushpull_impl();
+     public:
+        sink_pubsub_impl(size_t itemsize, char *address);
+        ~sink_pubsub_impl();
 
-            int work(int noutput_items,
-                    gr_vector_const_void_star &input_items,
-                    gr_vector_void_star &output_items);
-        };
+        int work(int noutput_items,
+                 gr_vector_const_void_star &input_items,
+                 gr_vector_void_star &output_items);
+    };
 
-    } // namespace zmqblocks
+  } // namespace zmqblocks
 } // namespace gr
 
-#endif /* INCLUDED_ZMQBLOCKS_PROBE_PUSHPULL_IMPL_H */
+#endif /* INCLUDED_ZMQBLOCKS_SINK_PUBSUB_IMPL_H */
 

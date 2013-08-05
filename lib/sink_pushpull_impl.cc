@@ -58,6 +58,8 @@ namespace gr {
      */
     sink_pushpull_impl::~sink_pushpull_impl()
     {
+        delete(d_socket);
+        delete(d_context);
     }
 
     int
