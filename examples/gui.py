@@ -36,7 +36,7 @@ class gui(QtGui.QMainWindow):
 
         # ZeroMQ
         self.probe_manager = zmqblocks.probe_manager()
-        self.probe_manager.add_pull_socket(probe_adr, 'f', self.plot_data)
+        self.probe_manager.add_pull_socket(probe_adr, 'float32', self.plot_data)
         self.rpc_mgr_buttons = zmqblocks.rpc_manager()
         self.rpc_mgr_buttons.set_request_socket(rpc_adr_buttons)
         self.rpc_mgr_waveform = zmqblocks.rpc_manager()

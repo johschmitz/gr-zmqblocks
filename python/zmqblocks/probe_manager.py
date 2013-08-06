@@ -22,7 +22,7 @@
 
 import zmq
 import threading
-import struct
+import numpy
 
 class probe_manager():
     def __init__(self):
@@ -45,8 +45,7 @@ class probe_manager():
             if poll.get(i[0]) == zmq.POLLIN:
                 # receive data
                 msg_packed = i[0].recv()
-                # use python struct library to unpack the data
-                chars_in_msg = len(msg_packed)/struct.calcsize(i[1])
-                msg_unpacked = struct.unpack(str(chars_in_msg)+i[1],msg_packed)
+                # use numpy to unpack the data
+                msg_unpacked = numpy.fromstring(msg_packed, numpy.dtype(i[1]))
                 # invoke callback function
                 i[2](msg_unpacked)
