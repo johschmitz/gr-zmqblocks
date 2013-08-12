@@ -46,6 +46,10 @@ and
 in doing so it is not important if server or client script has been started
 first.
 
+You can also start a remote GUI on anther machine just for monitoring.
+
+    remote_gui.py -s hostname
+
 Copyright information
 ------------------
 Copyright © 2013 Institute for Theoretical Information Technology,
