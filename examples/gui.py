@@ -53,7 +53,7 @@ class gui(QtGui.QMainWindow):
         self.connect(self.update_timer, QtCore.SIGNAL("timeout()"), self.probe_manager.watcher)
         self.connect(self.gui.pushButton_run, QtCore.SIGNAL("clicked()"), self.start_fg)
         self.connect(self.gui.pushButton_stop, QtCore.SIGNAL("clicked()"), self.stop_fg)
-        self.connect(self.gui.comboBox, QtCore.SIGNAL("currentIndexChanged(int)"), self.set_waveform)
+        self.connect(self.gui.comboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.set_waveform)
         self.connect(self.gui.spinBox, QtCore.SIGNAL("valueChanged(int)"), self.set_gain)
         self.shortcut_start = QtGui.QShortcut(Qt.QKeySequence("Ctrl+S"), self.gui)
         self.shortcut_stop = QtGui.QShortcut(Qt.QKeySequence("Ctrl+C"), self.gui)
@@ -92,9 +92,8 @@ class gui(QtGui.QMainWindow):
         curve.setData(self.x, self.y)
         self.gui.qwtPlot.replot()
 
-    def set_waveform(self):
-        waveform_str = str(self.gui.comboBox.currentText())
-        self.rpc_mgr_waveform.request("set_waveform",waveform_str)
+    def set_waveform(self, waveform_str):
+        self.rpc_mgr_waveform.request("set_waveform",str(waveform_str))
 
     def set_gain(self, gain):
         self.rpc_set_gain(gain)
