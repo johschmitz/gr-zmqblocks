@@ -30,7 +30,7 @@ class probe_manager():
         self.poller = zmq.Poller()
         self.interfaces = []
 
-    def add_pull_socket(self, address, data_type, callback_func):
+    def add_socket(self, address, data_type, callback_func):
         socket = self.zmq_context.socket(zmq.SUB)
         socket.setsockopt(zmq.SUBSCRIBE, "")
         socket.connect(address)
