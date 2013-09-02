@@ -32,10 +32,11 @@ from gnuradio import eng_notation
 from gnuradio.eng_option import eng_option
 from optparse import OptionParser
 import numpy
-import signal
 import gui
 from PyQt4 import QtGui
 import sys
+from threading import Thread
+import time
 
 
 ###############################################################################
@@ -47,21 +48,10 @@ class top_block(gr.top_block):
 
         self.options = options
 
-        # create a QT application
-        self.qapp = QtGui.QApplication(sys.argv)
-        # give Ctrl+C back to system
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
-
         # socket addresses
-        rpc_adr_server = "tcp://localhost:6666"
-        rpc_adr_reply = "tcp://*:6666"
-        probe_adr_gui = "tcp://localhost:5556"
-        probe_adr_fg = "tcp://*:5556"
+        rpc_adr = "tcp://*:6666"
+        probe_adr = "tcp://*:5556"
         sink_adr = "tcp://*:5555"
-
-        # create the main window
-        self.ui = gui.gui("Server",rpc_adr_server,rpc_adr_server,probe_adr_gui)
-        self.ui.show()
 
         # the strange sampling rate gives a nice movement in the plot :P
         self.samp_rate = samp_rate = 48200
@@ -73,8 +63,8 @@ class top_block(gr.top_block):
         #self.zmq_sink = zmqblocks.sink_reqrep_nopoll(gr.sizeof_float, sink_adr)
         self.zmq_sink = zmqblocks.sink_reqrep(gr.sizeof_float, sink_adr)
         #self.zmq_sink = zmqblocks.sink_pushpull(gr.sizeof_float, sink_adr)
-        #self.zmq_probe = zmqblocks.sink_pushpull(gr.sizeof_float, probe_adr_fg)
-        self.zmq_probe = zmqblocks.sink_pubsub(gr.sizeof_float, probe_adr_fg)
+        #self.zmq_probe = zmqblocks.sink_pushpull(gr.sizeof_float, probe_adr)
+        self.zmq_probe = zmqblocks.sink_pubsub(gr.sizeof_float, probe_adr)
         #self.null_sink = blocks.null_sink(gr.sizeof_float)
 
         # connects
@@ -83,7 +73,7 @@ class top_block(gr.top_block):
 
         # ZeroMQ
         self.rpc_manager = zmqblocks.rpc_manager()
-        self.rpc_manager.set_reply_socket(rpc_adr_reply)
+        self.rpc_manager.set_reply_socket(rpc_adr)
         self.rpc_manager.add_interface("start_fg",self.start_fg)
         self.rpc_manager.add_interface("stop_fg",self.stop_fg)
         self.rpc_manager.add_interface("set_waveform",self.set_waveform)
@@ -112,7 +102,6 @@ class top_block(gr.top_block):
                     'Saw Tooth' : analog.GR_SAW_WAVE}[waveform_str]
         self.gr_sig_source.set_waveform(waveform)
 
-
 ###############################################################################
 # Options Parser
 ###############################################################################
@@ -122,13 +111,19 @@ def parse_options():
     (options, args) = parser.parse_args()
     return options
 
-
 ###############################################################################
 # Main
 ###############################################################################
 if __name__ == "__main__":
     options = parse_options()
     tb = top_block(options)
-    tb.qapp.exec_()
+    try:
+        # keep the program running when flowgraph is stopped
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    print "Shutting down flowgraph."
     tb.stop()
+    tb.wait()
     tb = None
