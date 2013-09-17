@@ -48,7 +48,7 @@ class gui(QtGui.QMainWindow):
         rpc_adr_server = "tcp://"+options.servername+":6666"
         rpc_adr_client = "tcp://"+options.clientname+":6667"
         probe_adr_server = "tcp://"+options.servername+":5556"
-        probe_adr_client = "tcp://"+options.servername+":5557"
+        probe_adr_client = "tcp://"+options.clientname+":5557"
 
         # ZeroMQ
         self.probe_manager = zmqblocks.probe_manager()
