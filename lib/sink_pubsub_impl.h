@@ -25,7 +25,7 @@
 #define INCLUDED_ZMQBLOCKS_SINK_PUBSUB_IMPL_H
 
 #include <zmqblocks/sink_pubsub.h>
-#include <zmq.hpp>
+#include "zmq.hpp"
 
 namespace gr {
   namespace zmqblocks {

@@ -25,7 +25,7 @@
 #define INCLUDED_ZMQBLOCKS_SINK_REQREP_NOPOLL_IMPL_H
 
 #include <zmqblocks/sink_reqrep_nopoll.h>
-#include <zmq.hpp>
+#include "zmq.hpp"
 
 namespace gr {
   namespace zmqblocks {

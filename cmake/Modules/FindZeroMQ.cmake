@@ -19,7 +19,7 @@
 #  ZeroMQ_INCLUDE_DIRS       The location of ZeroMQ headers
 
 find_path(ZeroMQ_ROOT_DIR
-    NAMES include/zmq.hpp
+    NAMES include/zmq.h
 )
 
 find_library(ZeroMQ_LIBRARIES
@@ -28,7 +28,7 @@ find_library(ZeroMQ_LIBRARIES
 )
 
 find_path(ZeroMQ_INCLUDE_DIRS
-    NAMES zmq.hpp
+    NAMES zmq.h
     HINTS ${ZeroMQ_ROOT_DIR}/include
 )
 
