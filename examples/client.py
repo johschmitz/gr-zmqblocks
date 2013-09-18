@@ -33,8 +33,6 @@ from gnuradio import eng_notation
 from gnuradio.eng_option import eng_option
 from optparse import OptionParser
 import numpy
-import gui
-from PyQt4 import QtGui
 import sys
 from threading import Thread
 import time
