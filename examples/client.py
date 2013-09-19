@@ -113,6 +113,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         pass
     print "Shutting down flowgraph."
+    tb.rpc_manager.stop_watcher()
     tb.stop()
     tb.wait()
     tb = None
