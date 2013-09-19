@@ -33,6 +33,10 @@ class rpc_manager():
         self.poller_req_in = zmq.Poller()
         self.interfaces = dict()
 
+    def __del__(self):
+        self.stop_watcher()
+        self.watcher_thread.join()
+
     def set_reply_socket(self, address):
         self.rep_socket = self.zmq_context.socket(zmq.REP)
         self.rep_socket.bind(address)
@@ -54,7 +58,8 @@ class rpc_manager():
             print "ERROR: duplicate id_str"
 
     def watcher(self):
-        while True:
+        self.keep_running = True
+        while self.keep_running:
             # poll for calls
             socks = dict(self.poller_rep.poll(10))
             if socks.get(self.rep_socket) == zmq.POLLIN:
@@ -66,9 +71,13 @@ class rpc_manager():
                 self.rep_socket.send(pmt.serialize_str(pmt.to_pmt(reply)))
 
     def start_watcher(self):
-        t = threading.Thread(target=self.watcher,args=())
-        t.daemon = True
-        t.start()
+        self.watcher_thread = threading.Thread(target=self.watcher,args=())
+        self.watcher_thread.daemon = True
+        self.watcher_thread.start()
+
+    def stop_watcher(self):
+        self.keep_running = False
+        self.watcher_thread.join()
 
     def request(self, id_str, args=None):
         socks = dict(self.poller_req_out.poll(10))
