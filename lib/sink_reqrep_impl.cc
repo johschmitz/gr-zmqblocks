@@ -27,6 +27,8 @@
 
 #include <gnuradio/io_signature.h>
 #include "sink_reqrep_impl.h"
+#include <pmt/pmt.h>
+#include <string>
 
 namespace gr {
   namespace zmqblocks {
@@ -78,15 +80,34 @@ namespace gr {
             d_socket->recv(&request);
             int req_output_items = *(static_cast<int*>(request.data()));
 
-            // create message copy and send
             if (noutput_items < req_output_items) {
-                zmq::message_t msg(d_itemsize*noutput_items);
-                memcpy((void *)msg.data(), in, d_itemsize*noutput_items);
+                // get tags for all items in range
+                std::vector<tag_t> tags;
+                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0)+noutput_items);
+                // Create tag blob 
+                pmt::pmt_t tag_blob = pmt::make_blob(&tags, sizeof(std::vector<tag_t>) + (sizeof(tag_t) * tags.size()));
+                // Create item blob
+                pmt::pmt_t item_blob = pmt::make_blob(in, d_itemsize*noutput_items);
+                // Combine the blobs and serialize
+                pmt::pmt_t blob_tuple = pmt::make_tuple(tag_blob,item_blob);
+                std::string pmt_serial = pmt::serialize_str(blob_tuple);
+                // Copy to zmq message and send
+                zmq::message_t msg(pmt_serial.size());
+                memcpy((void *)msg.data(), &pmt_serial, pmt_serial.size());
                 d_socket->send(msg);
                 return noutput_items;
             } else {
-                zmq::message_t msg(d_itemsize*req_output_items);
-                memcpy((void *)msg.data(), in, d_itemsize*req_output_items);
+                // get tags for all items in range
+                std::vector<tag_t> tags;
+                this->get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0)+req_output_items);
+
+                // create message, copy in tags and data and send
+                pmt::pmt_t item_blob = pmt::make_blob(in, d_itemsize*req_output_items);
+                pmt::pmt_t tag_blob = pmt::make_blob(&tags, sizeof(std::vector<tag_t>) + (sizeof(tag_t) * tags.size()));
+                pmt::pmt_t blob_tuple = pmt::make_tuple(item_blob,tag_blob);
+                std::string pmt_serial = pmt::serialize_str(blob_tuple);
+                zmq::message_t msg(pmt_serial.size());
+                memcpy((void *)msg.data(), &pmt_serial, pmt_serial.size());
                 d_socket->send(msg);
                 return req_output_items;
             }

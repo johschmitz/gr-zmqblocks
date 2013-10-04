@@ -75,7 +75,7 @@ namespace gr {
         d_socket->recv(&request);
         int req_output_items = *(static_cast<int*>(request.data()));
 
-        // create message copy and send
+        // create message, copy and send
         if (noutput_items < req_output_items) {
             zmq::message_t msg(d_itemsize*noutput_items);
             memcpy((void *)msg.data(), in, d_itemsize*noutput_items);

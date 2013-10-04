@@ -68,7 +68,7 @@ namespace gr {
                            gr_vector_void_star &output_items)
     {
         const char *in = (const char *) input_items[0];
-        // create message copy and send
+        // create message, copy and send
         zmq::message_t msg(d_itemsize*noutput_items);
         memcpy((void *)msg.data(), in, d_itemsize*noutput_items);
         d_socket->send(msg);

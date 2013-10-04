@@ -27,6 +27,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "source_reqrep_impl.h"
+#include <pmt/pmt.h>
 
 namespace gr {
   namespace zmqblocks {
@@ -74,7 +75,7 @@ namespace gr {
         zmq::poll (&itemsout[0], 1, 0);
         //  If we got a reply, process
         if (itemsout[0].revents & ZMQ_POLLOUT) {
-            // Request data, FIXME non portable
+            // Request data
             zmq::message_t request(sizeof(int));
             memcpy ((void *) request.data (), &noutput_items, sizeof(int));
             d_socket->send(request);
@@ -86,9 +87,19 @@ namespace gr {
             // Receive data
             zmq::message_t reply;
             d_socket->recv(&reply);
-
-            // Copy to ouput buffer and return
-            memcpy(out, (void *)reply.data(), reply.size());
+            // Deserialize
+            pmt::pmt_t blob_tuple = pmt::deserialize_str((char *)reply.data());
+            // Get out tags with some silly casting
+            int num_tags = pmt::blob_length(pmt::tuple_ref(blob_tuple,0)) / sizeof(tag_t);
+            tag_t* raw_tag_ptr = (tag_t*)pmt::blob_data(pmt::tuple_ref(blob_tuple,0));
+            //std::vector<tag_t> tags(raw_tag_ptr, raw_tag_ptr+tag_bytes/sizeof(tag_t));
+            // Write tags
+            for (int i=0;i<num_tags;i++) {
+                add_item_tag(0,raw_tag_ptr[i]);
+            }
+            // Get out items and copy to output buffer
+            char *item_ptr = (char *)pmt::blob_data(pmt::tuple_ref(blob_tuple,1));
+            memcpy(out, item_ptr, reply.size());
             return reply.size()/d_itemsize;
         }
         return 0;
