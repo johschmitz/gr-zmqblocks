@@ -98,4 +98,4 @@ class rpc_manager():
                 return(callback_func())
         else:
             print "[RPC] ERROR: id_str not found"
-            return 0
+            return None
