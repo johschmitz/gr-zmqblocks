@@ -89,6 +89,7 @@ class gui(QtGui.QMainWindow):
         self.connect(self.gui.pushButtonStopServer, QtCore.SIGNAL("clicked()"), self.stop_fg_server)
         self.connect(self.gui.pushButtonRunClient, QtCore.SIGNAL("clicked()"), self.start_fg_client)
         self.connect(self.gui.pushButtonStopClient, QtCore.SIGNAL("clicked()"), self.stop_fg_client)
+        self.connect(self.gui.pushButtonTwoArgs, QtCore.SIGNAL("clicked()"), self.send_two_arg_request)
         self.connect(self.gui.comboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.set_waveform)
         self.connect(self.gui.spinBox, QtCore.SIGNAL("valueChanged(int)"), self.set_gain)
         self.shortcut_start = QtGui.QShortcut(Qt.QKeySequence("Ctrl+S"), self.gui)
@@ -111,6 +112,9 @@ class gui(QtGui.QMainWindow):
     def stop_fg_client(self):
         self.rpc_mgr_client.request("stop_fg")
 
+    def send_two_arg_request(self):
+        self.rpc_mgr_server.request("two_arg_rpc",["hello","world"])
+
     # plot the data from the queues
     def plot_data(self, plot, samples):
         self.x = range(0,len(samples),1)
@@ -131,13 +135,13 @@ class gui(QtGui.QMainWindow):
         self.plot_data(self.gui.qwtPlotClient, samples)
 
     def set_waveform(self, waveform_str):
-        self.rpc_mgr_server.request("set_waveform",str(waveform_str))
+        self.rpc_mgr_server.request("set_waveform",[str(waveform_str)])
 
     def set_gain(self, gain):
         self.rpc_set_gain(gain)
 
     def rpc_set_gain(self, gain):
-        self.rpc_mgr_server.request("set_k",gain)
+        self.rpc_mgr_server.request("set_k",[gain])
 
 ###############################################################################
 # Options Parser

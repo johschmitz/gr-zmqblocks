@@ -77,6 +77,7 @@ class top_block(gr.top_block):
         self.rpc_manager.add_interface("set_waveform",self.set_waveform)
         self.rpc_manager.add_interface("set_k",self.mult.set_k)
         self.rpc_manager.add_interface("get_sample_rate",self.throttle.sample_rate)
+        self.rpc_manager.add_interface("two_arg_rpc",self.two_arg_rpc)
         self.rpc_manager.start_watcher()
 
     def start_fg(self):
@@ -99,6 +100,10 @@ class top_block(gr.top_block):
                     'Triangle' : analog.GR_TRI_WAVE,
                     'Saw Tooth' : analog.GR_SAW_WAVE}[waveform_str]
         self.gr_sig_source.set_waveform(waveform)
+
+    def two_arg_rpc(self, arg1, arg2):
+        print "arg1", arg1
+        print "arg2", arg2
 
 ###############################################################################
 # Options Parser
