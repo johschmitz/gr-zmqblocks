@@ -90,11 +90,12 @@ to be able to send requests also add one on the other side
 send a request
 
         rpc_mganager.request("start_fg")
-        rpc_mgr_server.request("set_k",gain)
+        rpc_mgr_server.request("set_k",[gain])
 
 RPCs use GNU Radio pmt's to serialize arguments, the watcher thread will
 regularly poll for incoming RPC requests, deserializes arguments and call the
 interface callback function accordingly.
+Note that arguments have to be given as a list.
 
 
 Copyright information
