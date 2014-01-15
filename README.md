@@ -32,11 +32,11 @@ Assuming that the module has been compiled but not installed, in the
 gr-zmqblocks folder do
 
     cd examples
-    ./run_app.sh server
+    ./run_app.sh server.py
 
 on another terminal or machine
 
-    ./run_app.sh client -s hostname
+    ./run_app.sh client.py -s hostname
 
 You can also run a (remote) GUI on any of the two or a third machine for monitoring and control.
 
