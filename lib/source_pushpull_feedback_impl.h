@@ -25,7 +25,7 @@
 #define INCLUDED_ZMQBLOCKS_SOURCE_PUSHPULL_FEEDBACK_IMPL_H
 
 #include <zmqblocks/source_pushpull_feedback.h>
-#include "zmq.hpp"
+#include <zmq.hpp>
 
 namespace gr {
   namespace zmqblocks {

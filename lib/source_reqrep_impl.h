@@ -25,7 +25,7 @@
 #define INCLUDED_ZMQBLOCKS_SOURCE_REQREP_IMPL_H
 
 #include <zmqblocks/source_reqrep.h>
-#include "zmq.hpp"
+#include <zmq.hpp>
 
 namespace gr {
   namespace zmqblocks {
